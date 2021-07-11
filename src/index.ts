@@ -1,9 +1,9 @@
 import { ApolloServer } from 'apollo-server-express'
-import * as express from 'express'
+import express from 'express'
 import { buildSchema } from 'type-graphql'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
-import { RegisterResolver } from './modules/app-user/register';
+import { RegisterResolver } from './modules/app-user/register/register'
 
 
 const main = async () => {

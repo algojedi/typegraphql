@@ -6,11 +6,9 @@ import {
     Field,
     Mutation,
     Args,
-    FieldResolver,
-    Root
 } from 'type-graphql'
-import * as bcrypt from 'bcryptjs'
-import { AppUser } from '../../entity/AppUser'
+import bcrypt from 'bcryptjs'
+import { AppUser } from '../../../entity/AppUser';
 
 const salt = 12
 
@@ -33,7 +31,7 @@ class AppUserArgs {
     password: string
 }
 
-@Resolver(AppUser) // explicitly declared that we are resolving for AppUser
+@Resolver() // explicitly declared that we are resolving for AppUser
 export class RegisterResolver {
     @Query(() => String, {
         // String is a graphql type
@@ -43,10 +41,6 @@ export class RegisterResolver {
     async helloWorld() {
         // this will be the name of the query, unless overridden by obj with name field above
         return 'Hello World!'
-    }
-    @FieldResolver()
-    name(@Root() parent: AppUser) { // function name must match field to be resolved
-        return `${parent.firstName + ' ' + parent.lastName}`
     }
 
     @Mutation(() => AppUser) // graphql query should return AppUser 

@@ -18,7 +18,8 @@
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "allowSyntheticDefaultImports": false,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "skipLibCheck": true,
@@ -26,5 +27,5 @@
         "rootDir": "src"
     },
     "exclude": ["node_modules"],
-    "include": ["./src/*", "./src/**/*.tsx", "./src/**/*.ts"]
+    "include": ["./src/*", "./src/**/*.tsx", "./src/**/*.ts", "./src/**/**/*.ts"]
 }
