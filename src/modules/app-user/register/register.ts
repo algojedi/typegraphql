@@ -6,9 +6,12 @@ import {
     Field,
     Mutation,
     Args,
+    UseMiddleware,
 } from 'type-graphql'
 import bcrypt from 'bcryptjs'
 import { AppUser } from '../../../entity/AppUser';
+import { isAuth } from '../../middleware/isAuth';
+import { logger } from '../../middleware/logger';
 
 const salt = 12
 
@@ -33,6 +36,7 @@ class AppUserArgs {
 
 @Resolver() // explicitly declared that we are resolving for AppUser
 export class RegisterResolver {
+    @UseMiddleware(isAuth, logger) // authentication based on client cookie
     @Query(() => String, {
         // String is a graphql type
         name: 'firstShit',
