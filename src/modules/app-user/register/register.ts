@@ -12,6 +12,8 @@ import bcrypt from 'bcryptjs'
 import { AppUser } from '../../../entity/AppUser';
 import { isAuth } from '../../middleware/isAuth';
 import { logger } from '../../middleware/logger';
+import { sendEmail } from '../../../modules/utils/sendEmail'
+import { createConfirmationUrl } from '../../../modules/utils/createConfirmationUrl';
 
 const salt = 12
 
@@ -58,6 +60,9 @@ export class RegisterResolver {
             email,
             password: hashedPassword
         }).save() //.catch(err => console.log('oops.. something went wrong, user not created', err))
+
+        await sendEmail(email, await createConfirmationUrl(user.id))
+
         return user
     }
 }

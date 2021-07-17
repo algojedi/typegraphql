@@ -35,4 +35,7 @@ export class AppUser extends BaseEntity {
     @Column()
     @Length(1,20)
     password: string
+
+    @Column("bool", { default: false})
+    confirmed: boolean
 }

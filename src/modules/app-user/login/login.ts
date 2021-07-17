@@ -27,6 +27,9 @@ export class LoginResolver {
             return null
         }
 
+        // return null if the user has no confirmed his email address
+        if (!user.confirmed) return null
+
         ctx.req.session!.userId = user.id
         return user
     }

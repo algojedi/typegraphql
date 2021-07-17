@@ -10,6 +10,7 @@ import cors from 'cors'
 import { redis } from './redis'
 import { LoginResolver } from './modules/app-user/login/login'
 import { MeResolver } from './modules/app-user/me'
+import { ConfirmUserResolver } from './modules/app-user/confirm-user';
 
 // below snippet is needed so that userId can be added to the session object during auth
 declare module 'express-session' {
@@ -21,7 +22,7 @@ declare module 'express-session' {
 const main = async () => {
     await createConnection()
     const schema = await buildSchema({
-        resolvers: [LoginResolver, RegisterResolver, MeResolver],
+        resolvers: [LoginResolver, RegisterResolver, MeResolver, ConfirmUserResolver],
         // the below authChecker will only be called on resolvers with @Authenticated()
         authChecker: ({ context: { req } }) => {
             // has access to the same args as resolvers
