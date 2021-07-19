@@ -1,4 +1,4 @@
-import { Length } from 'class-validator'
+import { IsEmail, Length, MinLength } from 'class-validator'
 import {
     Resolver,
     Query,
@@ -6,19 +6,20 @@ import {
     Field,
     Mutation,
     Args,
-    UseMiddleware,
+    UseMiddleware
 } from 'type-graphql'
 import bcrypt from 'bcryptjs'
-import { AppUser } from '../../../entity/AppUser';
-import { isAuth } from '../../middleware/isAuth';
-import { logger } from '../../middleware/logger';
+import { AppUser } from '../../../entity/AppUser'
+import { isAuth } from '../../middleware/isAuth'
+import { logger } from '../../middleware/logger'
 import { sendEmail } from '../../../modules/utils/sendEmail'
-import { createConfirmationUrl } from '../../../modules/utils/createConfirmationUrl';
+import { createConfirmationUrl } from '../../../modules/utils/createConfirmationUrl'
+import { IsEmailAlreadyExist } from './isEmailAlreadyExist'
 
 const salt = 12
 
 @ArgsType()
-class AppUserArgs {
+class AppUserArgs { //} extends PasswordInput {
     @Field()
     @Length(3, 10)
     firstName: string
@@ -28,12 +29,13 @@ class AppUserArgs {
     lastName: string
 
     @Field()
-    @Length(3, 20)
+    @IsEmail()
+    @IsEmailAlreadyExist({ message: 'email already in use' })
     email: string
 
     @Field()
-    @Length(3, 14)
-    password: string
+    @MinLength(5)
+    password: string // TODO: not sure why graphql doesn't recognize this if factored out by PasswordInput
 }
 
 @Resolver() // explicitly declared that we are resolving for AppUser
@@ -49,11 +51,13 @@ export class RegisterResolver {
         return 'Hello World!'
     }
 
-    @Mutation(() => AppUser) // graphql query should return AppUser 
+    @Mutation(() => AppUser) // graphql query should return AppUser
     async register(
         @Args() { firstName, lastName, email, password }: AppUserArgs
-    ): Promise<AppUser> {  // return type is for typescript intellisense
+    ): Promise<AppUser> {
+        // return type is for typescript intellisense
         const hashedPassword = await bcrypt.hash(password, salt)
+        // TODO: the password creation process should be separate module
         const user = await AppUser.create({
             firstName,
             lastName,

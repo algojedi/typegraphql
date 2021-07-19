@@ -3,32 +3,31 @@ import express from 'express'
 import { buildSchema } from 'type-graphql'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
-import { RegisterResolver } from './modules/app-user/register/register'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import cors from 'cors'
 import { redis } from './redis'
-import { LoginResolver } from './modules/app-user/login/login'
-import { MeResolver } from './modules/app-user/me'
-import { ConfirmUserResolver } from './modules/app-user/confirm-user';
 
 // below snippet is needed so that userId can be added to the session object during auth
-declare module 'express-session' {
-    export interface SessionData {
-        userId: number
-    }
-}
+// declare module 'express-session' {
+//     export interface SessionData {
+//         userId: number
+//     }
+// }
 
 const main = async () => {
     await createConnection()
     const schema = await buildSchema({
-        resolvers: [LoginResolver, RegisterResolver, MeResolver, ConfirmUserResolver],
+        // resolvers: [LoginResolver, RegisterResolver, MeResolver, ConfirmUserResolver],
+        // rather than have an array resolvers, better to just tell typegraphql
+        // where the resolvers can be found:
+        resolvers: [__dirname + '/modules/**/*.ts'],
         // the below authChecker will only be called on resolvers with @Authenticated()
         authChecker: ({ context: { req } }) => {
             // has access to the same args as resolvers
             // if (req.session.userId) return true
             // return false -- abbreviated to the one line below
-            return !!req.session.userId  
+            return !!req.session.userId
         }
     })
 

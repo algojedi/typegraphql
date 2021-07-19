@@ -1,6 +1,6 @@
 import { Resolver, Query, Ctx } from 'type-graphql'
-import { AppUser } from '../../entity/AppUser';
-import { MyContext } from '../../types/context';
+import { AppUser } from '../../entity/AppUser'
+import { MyContext } from '../../types/context'
 
 // just an endpoint for a user with a auth cookie to get his/her info
 
