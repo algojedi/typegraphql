@@ -35,7 +35,7 @@ const main = async () => {
         schema,
         // context gives us access to the req object through apollo ?
         // the context is made accessible through @Ctx annotation
-        context: ({ req }: any) => ({ req })
+        context: ({ req, res }: any) => ({ req, res })
     })
 
     const app = express()
