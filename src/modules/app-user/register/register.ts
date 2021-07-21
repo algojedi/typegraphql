@@ -6,7 +6,8 @@ import {
     Field,
     Mutation,
     Args,
-    UseMiddleware
+    UseMiddleware,
+    Arg
 } from 'type-graphql'
 import bcrypt from 'bcryptjs'
 import { AppUser } from '../../../entity/AppUser'
@@ -19,7 +20,7 @@ import { IsEmailAlreadyExist } from './isEmailAlreadyExist'
 const salt = 12
 
 @ArgsType()
-class AppUserArgs { //} extends PasswordInput {
+export class AppUserArgs { //} extends PasswordInput {
     @Field()
     @Length(3, 10)
     firstName: string
@@ -40,16 +41,17 @@ class AppUserArgs { //} extends PasswordInput {
 
 @Resolver() // explicitly declared that we are resolving for AppUser
 export class RegisterResolver {
-    @UseMiddleware(isAuth, logger) // authentication based on client cookie
-    @Query(() => String, {
-        // String is a graphql type
-        name: 'firstShit',
-        description: 'I am trying to learn about graphql'
-    })
-    async helloWorld() {
-        // this will be the name of the query, unless overridden by obj with name field above
-        return 'Hello World!'
-    }
+    // @UseMiddleware(isAuth, logger) // authentication based on client cookie
+    // @Query(() => String, {
+    //     // String is a graphql type
+    //     name: 'firstShit',
+    //     description: 'I am trying to learn about graphql'
+    // })
+    // async helloWorld() {
+    //     // this will be the name of the query, unless overridden by obj with name field above
+    //     return 'Hello World!'
+    // }
+
 
     @Mutation(() => AppUser) // graphql query should return AppUser
     async register(
